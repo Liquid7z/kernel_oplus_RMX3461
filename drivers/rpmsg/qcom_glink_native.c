@@ -447,6 +447,7 @@ static int qcom_glink_tx(struct qcom_glink *glink,
 		spin_unlock_irqrestore(&glink->tx_lock, flags);
 
 		wait_event_timeout(glink->tx_avail_notify,
+
 				   (qcom_glink_tx_avail(glink) >= tlen
 				   || atomic_read(&glink->in_reset)), 10 * HZ);
 
@@ -1286,6 +1287,7 @@ static irqreturn_t qcom_glink_native_intr(int irq, void *data)
 		glink_resume_pkt = true;
 		pm_system_wakeup();
 	}
+
 	/* To wakeup any blocking writers */
 	wake_up_all(&glink->tx_avail_notify);
 
@@ -1933,6 +1935,9 @@ static void qcom_glink_rx_close_ack(struct qcom_glink *glink, unsigned int lcid)
 	struct rpmsg_channel_info chinfo;
 	struct glink_channel *channel;
 	unsigned long flags;
+
+	/* To wakeup any blocking writers */
+	wake_up_all(&glink->tx_avail_notify);
 
 	spin_lock_irqsave(&glink->idr_lock, flags);
 	channel = idr_find(&glink->lcids, lcid);
