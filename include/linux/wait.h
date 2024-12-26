@@ -216,7 +216,6 @@ void __wake_up_pollfree(struct wait_queue_head *wq_head);
 #ifdef OPLUS_FEATURE_PERFORMANCE
 #define wake_up_sync(x)			__wake_up_sync((x), TASK_NORMAL, 1)
 #endif
-
 #define wake_up_interruptible(x)	__wake_up(x, TASK_INTERRUPTIBLE, 1, NULL)
 #define wake_up_interruptible_nr(x, nr)	__wake_up(x, TASK_INTERRUPTIBLE, nr, NULL)
 #define wake_up_interruptible_all(x)	__wake_up(x, TASK_INTERRUPTIBLE, 0, NULL)
