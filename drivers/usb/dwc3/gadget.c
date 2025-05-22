@@ -4524,7 +4524,6 @@ err1:
 err0:
 	return ret;
 }
-<<<<<<< HEAD
 
 void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
 {
@@ -4534,5 +4533,3 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
 		enable_irq(dwc->irq_gadget);
 	}
 }
-=======
->>>>>>> edb9ef4d88a2 (usb: dwc3: core: Stop processing of pending events if controller is halted)
