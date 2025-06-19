@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
-/* Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2016-2019, 2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/clk.h>
@@ -4851,10 +4852,9 @@ static int msm_mi2s_snd_startup(struct snd_pcm_substream *substream)
 	mutex_lock(&mi2s_intf_conf[index].lock);
 	if (++mi2s_intf_conf[index].ref_cnt == 1) {
 		/* Check if msm needs to provide the clock to the interface */
-		if (!mi2s_intf_conf[index].msm_is_mi2s_master) {
+
+		if (!mi2s_intf_conf[index].msm_is_mi2s_master)
 			mi2s_clk[index].clk_id = mi2s_ebit_clk[index];
-			fmt = SND_SOC_DAIFMT_CBM_CFM;
-		}
 		ret = msm_mi2s_set_sclk(substream, true);
 		if (ret < 0) {
 			dev_err(rtd->card->dev,
@@ -4876,6 +4876,14 @@ static int msm_mi2s_snd_startup(struct snd_pcm_substream *substream)
 				pr_err("%s: MI2S TLMM pinctrl set failed with %d\n",
 					__func__, ret_pinctrl);
 		}
+	}
+	if (!mi2s_intf_conf[index].msm_is_mi2s_master)
+		fmt = SND_SOC_DAIFMT_CBM_CFM;
+	ret = snd_soc_dai_set_fmt(cpu_dai, fmt);
+	if (ret < 0) {
+		pr_err("%s: set fmt cpu dai failed for MI2S (%d), err:%d\n",
+			__func__, index, ret);
+		goto clk_off;
 	}
 clk_off:
 	if (ret < 0)

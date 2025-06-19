@@ -177,6 +177,10 @@ MAKEFLAGS += --include-dir=$(abs_srctree)
 need-sub-make := 1
 endif
 
+ifeq ($(CONFIG_ARCH_SM6150), y)
+include $(srctree)/techpack/audio/config/sm6150auto.conf
+endif
+
 ifneq ($(filter 3.%,$(MAKE_VERSION)),)
 # 'MAKEFLAGS += -rR' does not immediately become effective for GNU Make 3.x
 # We need to invoke sub-make to avoid implicit rules in the top Makefile.
@@ -2106,3 +2110,12 @@ FORCE:
 # Declare the contents of the PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
+
+ifeq ($(CONFIG_ARCH_SM6150), y)
+LINUXINCLUDE    += \
+                -include $(srctree)/techpack/audio/config/sm6150autoconf.h
+endif
+obj-y += soc/
+obj-y += dsp/
+obj-y += ipc/
+obj-y += asoc/
