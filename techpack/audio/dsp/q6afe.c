@@ -4926,6 +4926,8 @@ EXPORT_SYMBOL(afe_get_island_mode_cfg);
 void afe_set_island_mode_cfg(u16 port_id, u32 enable_flag)
 {
 	uint16_t port_index;
+	int ret = 0;
+	
 	ret = afe_validate_port(port_id);
 	if (ret < 0) {
 		pr_err("%s: Not a valid port id = 0x%x ret %d\n", __func__,

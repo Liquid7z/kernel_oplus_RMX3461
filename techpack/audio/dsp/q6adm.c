@@ -175,6 +175,16 @@ int voip_rx_pop_cnt = 0;
 int voip_tx_pop_cnt = 0;
 int voip_rx_clip_cnt = 0;
 int voip_tx_clip_cnt = 0;
+
+extern int voice_rx_muted_cnt;
+extern int voice_tx_muted_cnt;
+extern int voice_rx_zd_cnt;
+extern int voice_tx_zd_cnt;
+extern int voice_rx_pop_cnt;
+extern int voice_tx_pop_cnt;
+extern int voice_rx_clip_cnt;
+extern int voice_tx_clip_cnt;
+
 #endif /* OPLUS_FEATURE_AUDIODETECT */
 
 static struct mutex dts_srs_lock;

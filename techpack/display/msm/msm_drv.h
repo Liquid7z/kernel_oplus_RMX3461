@@ -230,6 +230,11 @@ enum msm_mdp_conn_property {
 	CONNECTOR_PROP_QSYNC_MIN_FPS,
 #endif
 
+#ifdef OPLUS_BUG_STABILITY
+	// Prop to store sync panel backlight level
+	CONNECTOR_PROP_SYNC_BACKLIGHT_LEVEL,
+#endif /* OPLUS_BUG_STABILITY */
+
 	/* total # of properties */
 	CONNECTOR_PROP_COUNT
 };
@@ -961,6 +966,10 @@ struct msm_drm_private {
 
 	struct mutex vm_client_lock;
 	struct list_head vm_client_list;
+
+#ifdef OPLUS_BUG_STABILITY
+	struct mutex dspp_lock;
+#endif /* OPLUS_BUG_STABILITY */
 };
 
 /* get struct msm_kms * from drm_device * */

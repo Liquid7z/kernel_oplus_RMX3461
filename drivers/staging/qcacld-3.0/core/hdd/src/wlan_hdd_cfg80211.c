@@ -15570,6 +15570,11 @@ static int __wlan_hdd_cfg80211_get_usable_channel(struct wiphy *wiphy,
 	if (0 != ret)
 		return ret;
 
+	if (hdd_ctx->driver_status == DRIVER_MODULES_CLOSED) {
+		hdd_err("Driver Modules are closed");
+		return -EINVAL;
+	}
+
 	res_msg = qdf_mem_malloc(NUM_CHANNELS *
 				 sizeof(*res_msg));
 
@@ -21129,10 +21134,7 @@ static void hdd_set_wapi_crypto_key_mgmt_param(struct hdd_adapter *adapter)
 	if (adapter->wapi_info.wapi_auth_mode == WAPI_AUTH_MODE_CERT)
 		HDD_SET_BIT(set_val, WLAN_CRYPTO_KEY_MGMT_WAPI_CERT);
 
-	/* Set AKM and original AKM type */
 	wlan_crypto_set_vdev_param(vdev, WLAN_CRYPTO_PARAM_KEY_MGMT, set_val);
-	wlan_crypto_set_vdev_param(vdev, WLAN_CRYPTO_PARAM_ORIG_KEY_MGMT,
-				   set_val);
 
 	set_val = 0;
 	HDD_SET_BIT(set_val, WLAN_CRYPTO_CIPHER_WAPI_SMS4);

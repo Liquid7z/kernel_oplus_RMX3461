@@ -9,16 +9,6 @@ NAME = Kleptomaniac Octopus
 # present in the kernel so that out-of-tree modules can act upon it
 export KERNEL_SUPPORTS_NESTED_COMPOSITES := y
 
-# WLAN_ROOT must contain an absolute path (i.e. not a relative path)
-KBUILD_OPTIONS := WLAN_ROOT=$(shell cd $(KERNEL_SRC); readlink -e $(M))
-
-# MODNAME should be qca_cld3_wlan for helium based wear target
-ifeq (qca_cld3, $(WLAN_WEAR_CHIPSET))
-KBUILD_OPTIONS += MODNAME?=$(WLAN_WEAR_CHIPSET)_wlan
-else
-KBUILD_OPTIONS += MODNAME?=wlan
-endif
-
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
 # More info can be located in ./README
@@ -92,16 +82,6 @@ endif
 ifndef KBUILD_VERBOSE
   KBUILD_VERBOSE = 0
 endif
-
-# auto-detect subdirs
-ifeq ($(CONFIG_ARCH_KONA), y)
-     ifeq ($(CONFIG_QGKI), y)
-		include $(srctree)/techpack/display/config/konadisp.conf
-LINUXINCLUDE    += -include $(srctree)/techpack/display/config/konadispconf.h
-     else
-		include $(srctree)/techpack/display/config/gki_konadisp.conf
-LINUXINCLUDE    += -include $(srctree)/techpack/display/config/gki_konadispconf.h
-     endif
 
 ifeq ($(KBUILD_VERBOSE),1)
   quiet =
@@ -185,10 +165,6 @@ ifneq ($(abs_srctree),$(abs_objtree))
 # once after the Makefile is read. We need to invoke sub-make.
 MAKEFLAGS += --include-dir=$(abs_srctree)
 need-sub-make := 1
-endif
-
-ifeq ($(CONFIG_ARCH_SM6150), y)
-include $(srctree)/techpack/audio/config/sm6150auto.conf
 endif
 
 ifneq ($(filter 3.%,$(MAKE_VERSION)),)
@@ -2120,12 +2096,3 @@ FORCE:
 # Declare the contents of the PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
-
-ifeq ($(CONFIG_ARCH_SM6150), y)
-LINUXINCLUDE    += \
-                -include $(srctree)/techpack/audio/config/sm6150autoconf.h
-endif
-obj-y += soc/
-obj-y += dsp/
-obj-y += ipc/
-obj-y += asoc/
