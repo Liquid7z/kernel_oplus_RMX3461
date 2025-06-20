@@ -65,6 +65,13 @@ static int dsi_pwr_parse_supply_node(struct dsi_parser_utils *utils,
 		regs->vregs[i].disable_load = tmp;
 
 		/* Optional values */
+		rc = utils->read_u32(node, "qcom,supply-ulp-load", &tmp);
+		if (rc) {
+			DSI_DEBUG("ulp-load not specified\n");
+		}
+		regs->vregs[i].ulp_load = (!rc ? tmp :
+			regs->vregs[i].enable_load);
+
 		rc = utils->read_u32(node, "qcom,supply-off-min-voltage", &tmp);
 		if (rc) {
 			DSI_DEBUG("off-min-voltage not specified\n");

@@ -93,6 +93,16 @@ ifndef KBUILD_VERBOSE
   KBUILD_VERBOSE = 0
 endif
 
+# auto-detect subdirs
+ifeq ($(CONFIG_ARCH_KONA), y)
+     ifeq ($(CONFIG_QGKI), y)
+		include $(srctree)/techpack/display/config/konadisp.conf
+LINUXINCLUDE    += -include $(srctree)/techpack/display/config/konadispconf.h
+     else
+		include $(srctree)/techpack/display/config/gki_konadisp.conf
+LINUXINCLUDE    += -include $(srctree)/techpack/display/config/gki_konadispconf.h
+     endif
+
 ifeq ($(KBUILD_VERBOSE),1)
   quiet =
   Q =
