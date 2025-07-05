@@ -3,11 +3,21 @@ VERSION = 5
 PATCHLEVEL = 4
 SUBLEVEL = 292
 EXTRAVERSION =
-NAME = GigglyBits Kurnal
+NAME = Kleptomaniac Octopus
 
 # indicate that change "Kbuild: Support nested composite objects" is
 # present in the kernel so that out-of-tree modules can act upon it
 export KERNEL_SUPPORTS_NESTED_COMPOSITES := y
+
+# WLAN_ROOT must contain an absolute path (i.e. not a relative path)
+KBUILD_OPTIONS := WLAN_ROOT=$(shell cd $(KERNEL_SRC); readlink -e $(M))
+
+# MODNAME should be qca_cld3_wlan for helium based wear target
+ifeq (qca_cld3, $(WLAN_WEAR_CHIPSET))
+KBUILD_OPTIONS += MODNAME?=$(WLAN_WEAR_CHIPSET)_wlan
+else
+KBUILD_OPTIONS += MODNAME?=wlan
+endif
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
